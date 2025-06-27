@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">
+            c180-2a04-8ec0-0-240-7103-8004-fb37-32c3.ngrok-free.app
+        </domain>
+    </domain-config>
+</network-security-config>
