@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
@@ -298,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
         RequestBody requestBody = builder.build();
 
         Request.Builder builder2 = new Request.Builder();
-        builder2.url("https://c180-2a04-8ec0-0-240-7103-8004-fb37-32c3.ngrok-free.app/predict");
+        builder2.url("https://8d933c23a627.ngrok-free.app/predict");
         builder2.post(requestBody);
         Request request = builder2.build();
 
@@ -322,8 +320,6 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = 0; i < resultatArray.length(); i++) {
                             idList.add(resultatArray.getLong(i));
                         }
-
-                        // Appelle une méthode pour récupérer les infos Deezer
                         fetchDeezerInfos(idList);
 
                     } catch (JSONException e) {
@@ -341,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -363,22 +358,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchDeezerInfos(List<Long> idList) {
-        // On s'assure que la liste est vide avant de commencer
         musicList.clear();
-        // On notifie une première fois pour vider l'ancienne liste de l'écran
         runOnUiThread(() -> musicAdapter.notifyDataSetChanged());
 
         if (idList != null && !idList.isEmpty()) {
-            // On commence par la première piste (index 0)
             fetchTrackInfoSequentially(idList, 0);
         }
     }
 
     private void fetchTrackInfoSequentially(List<Long> idList, int index) {
-        // Condition d'arrêt : si on a traité tous les IDs, on arrête.
         if (index >= idList.size()) {
-            // Toutes les musiques ont été ajoutées, on peut s'arrêter.
-            // L'UI a déjà été mise à jour au fur et à mesure.
             return;
         }
 
@@ -390,7 +379,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("DEEZER_API", "Erreur requête pour ID " + id, e);
-                // On passe quand même au suivant, même en cas d'échec
                 fetchTrackInfoSequentially(idList, index + 1);
             }
 
@@ -401,7 +389,6 @@ public class MainActivity extends AppCompatActivity {
                         String responseData = response.body().string();
                         JSONObject dataObject = new JSONObject(responseData);
 
-                        // Vérifions que le preview n'est pas vide, Deezer le fait parfois
                         if (dataObject.has("preview") && !dataObject.getString("preview").isEmpty()) {
                             String title = dataObject.getString("title");
                             String artist = dataObject.getJSONObject("artist").getString("name");
@@ -409,7 +396,6 @@ public class MainActivity extends AppCompatActivity {
                             String coverUrl = dataObject.getJSONObject("album").getString("cover_medium");
                             musicItem item = new musicItem(title, artist, previewUrl, coverUrl);
 
-                            // On ajoute à la liste et on notifie l'UI immédiatement
                             runOnUiThread(() -> {
                                 musicList.add(item);
                                 musicAdapter.notifyItemInserted(musicList.size() - 1);
@@ -422,11 +408,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("DEEZER_API", "Erreur parsing JSON pour ID " + id, e);
                     }
                 } else {
-                    // Logue l'erreur pour savoir ce qu'il se passe !
                     Log.e("DEEZER_API", "Réponse non réussie pour ID " + id + ". Code: " + response.code());
                 }
-
-                // Important : qu'il y ait succès ou échec, on lance la requête pour l'ID suivant.
                 fetchTrackInfoSequentially(idList, index + 1);
             }
         });

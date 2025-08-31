@@ -21,8 +21,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     private final List<musicItem> musicList;
     private final OnItemClickListener listener;
     private boolean showPredictButton;
-
-    // Interface mise à jour pour inclure le clic Play
     public interface OnItemClickListener {
         void onPlayClick(musicItem item, int position);
         void onPredictClick(musicItem item, int position);
@@ -31,7 +29,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     public void updateSeekBar(int position, int progressMs) {
         if (position >= 0 && position < musicList.size()) {
             musicItem item = musicList.get(position);
-            item.setCurrentProgress(progressMs);  // ajoute ce champ dans la classe musicItem
+            item.setCurrentProgress(progressMs);
             notifyItemChanged(position);
         }
     }
@@ -81,7 +79,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             title = itemView.findViewById(R.id.musicTitle);
             artist = itemView.findViewById(R.id.musicArtist);
             seekBar = itemView.findViewById(R.id.seekBar4);
-            playButton = itemView.findViewById(R.id.playButton); // à avoir dans ton layout
+            playButton = itemView.findViewById(R.id.playButton); //
             coverImageView = itemView.findViewById(R.id.imageView4);
             predictButton = itemView.findViewById(R.id.predictButton);
         }
