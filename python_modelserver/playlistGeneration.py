@@ -1,12 +1,9 @@
 import pandas as pd
 import requests
-import time # Pour être un bon citoyen de l'API et ne pas la surcharger
+import time 
 
-# --- CONFIGURATION ---
-# 🔧 Charger le CSV contenant les infos (pas de changement ici)
 df_audio = pd.read_csv('df_audio.csv')
 
-# 🔗 Extraire l'ID depuis le filename (pas de changement ici)
 def extract_id(filename):
     try:
         return int(filename.split('_')[0])
@@ -14,26 +11,17 @@ def extract_id(filename):
         return None
 
 df_audio['id'] = df_audio['filename'].apply(extract_id)
-# Supprimer les lignes où l'ID n'a pas pu être extrait
 df_audio.dropna(subset=['id'], inplace=True)
 df_audio['id'] = df_audio['id'].astype(int)
 
-
-# --- NOUVELLE FONCTION DE VÉRIFICATION AUPRÈS DE DEEZER ---
 def has_deezer_preview(track_id: int) -> bool:
-    """
-    Interroge l'API Deezer pour un ID de morceau donné et vérifie
-    si un lien de preview non-vide existe.
-    Retourne True si c'est le cas, False sinon.
-    """
+
     try:
-        # On utilise un timeout pour ne pas bloquer le serveur indéfiniment
         response = requests.get(f"https://api.deezer.com/track/{track_id}", timeout=5)
-        response.raise_for_status()  # Lève une exception pour les erreurs HTTP (4xx, 5xx)
+        response.raise_for_status()  
 
         data = response.json()
 
-        # On vérifie si la clé 'preview' existe ET si sa valeur n'est pas une chaîne vide
         if 'preview' in data and data['preview']:
             print(f"✅ ID {track_id}: Preview trouvée.")
             return True
@@ -45,19 +33,11 @@ def has_deezer_preview(track_id: int) -> bool:
         print(f"🔥 Erreur API pour l'ID {track_id}: {e}")
         return False
     except KeyError:
-        # Si la réponse de l'API est inattendue (ex: ID non trouvé, clé 'error')
         print(f"❌ ID {track_id}: Réponse invalide ou morceau non trouvé sur Deezer.")
         return False
 
-# --- NOUVELLE FONCTION D'AIDE POUR CONSTRUIRE LA PLAYLIST ---
 def find_valid_tracks(candidate_df: pd.DataFrame, num_required: int) -> list:
-    """
-    Prend un DataFrame de morceaux candidats, les mélange, et vérifie un par un
-    s'ils ont une preview Deezer jusqu'à en trouver le nombre requis.
-    """
     valid_ids = []
-    
-    # Mélanger les candidats pour s'assurer que les résultats sont variés
     shuffled_candidates = candidate_df.sample(frac=1)
 
     for _, row in shuffled_candidates.iterrows():
@@ -65,20 +45,13 @@ def find_valid_tracks(candidate_df: pd.DataFrame, num_required: int) -> list:
 
         if has_deezer_preview(track_id):
             valid_ids.append(track_id)
-            # Petite pause pour ne pas surcharger l'API Deezer (rate limiting)
             time.sleep(0.1) 
-
-        # Si on a trouvé notre compte, on arrête la boucle pour gagner du temps
         if len(valid_ids) == num_required:
             break
             
     return valid_ids
 
-# --- FONCTIONS PRINCIPALES REFACTORISÉES ---
-
-# 🎧 Générer une playlist en fonction du genre et du mood (MODIFIÉE)
 def playlist_generator_music(genre: str, mood: str):
-    # 1. Premier filtre, plus strict (genre + mood)
     filtered_df = df_audio[
         (df_audio['genre'].str.lower() == genre.lower()) &
         (df_audio['mood'].str.lower().str.contains(mood.lower()))
@@ -87,15 +60,11 @@ def playlist_generator_music(genre: str, mood: str):
     print(f"\n--- Recherche de 8 morceaux pour '{genre} {mood}' ---")
     print(f"{len(filtered_df)} candidats potentiels trouvés avec le genre et le mood.")
     
-    # On utilise notre nouvelle fonction pour trouver des morceaux valides
     final_playlist = find_valid_tracks(filtered_df, num_required=8)
 
-    # 2. Si on n'a pas 8 morceaux, on élargit la recherche (genre seul)
     if len(final_playlist) < 8:
         needed = 8 - len(final_playlist)
         print(f"\nPas assez de morceaux valides. Il en manque {needed}. Élargissement de la recherche...")
-        
-        # On prend les morceaux du même genre, en excluant ceux qu'on a déjà validés
         genre_df = df_audio[
             (df_audio['genre'].str.lower() == genre.lower()) &
             (~df_audio['id'].isin(final_playlist))
@@ -113,8 +82,6 @@ def playlist_generator_music(genre: str, mood: str):
     print(f"\n✅ Playlist finale générée avec {len(final_playlist)} morceaux.")
     return final_playlist
 
-
-# 🎧 Générer une playlist uniquement en fonction du mood (MODIFIÉE)
 def playlist_generator_mood(mood: str):
     filtered_df = df_audio[
         df_audio['mood'].str.lower().str.contains(mood.lower())
@@ -132,14 +99,3 @@ def playlist_generator_mood(mood: str):
     print(f"\n✅ Playlist finale générée avec {len(final_playlist)} morceaux.")
     return final_playlist
 
-
-# 🔥 Exemple d'utilisation
-print("Exemple avec genre et mood:")
-final_list = playlist_generator_music("rock", "happy")
-print("IDs retournés:", final_list)
-
-print("\n" + "="*30 + "\n")
-
-print("Exemple avec mood seul:")
-final_list_mood = playlist_generator_mood("sad")
-print("IDs retournés:", final_list_mood)

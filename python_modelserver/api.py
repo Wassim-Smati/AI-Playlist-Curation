@@ -8,6 +8,13 @@ from playlistGeneration import *
 app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict(): 
+
+    if not os.path.exists('uploads'): 
+        os.makedirs('uploads')
+
+    if not os.path.exists('images'): 
+        os.makedirs('images')
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     
@@ -20,8 +27,8 @@ def predict():
     filepath = os.path.join("uploads", filename)
     file.save(filepath)
 
-    img = audio_to_mel_spec(filepath, "Images/spectrogramme")
-    img_array = load_image("Images/spectrogramme.png")
+    img = audio_to_mel_spec(filepath, "images/spectrogramme")
+    img_array = load_image("images/spectrogramme.png")
 
     predCnn = model_CNN.predict(img_array)
 
@@ -29,7 +36,7 @@ def predict():
     genre1 = genre_map[predicted_indices[0]] 
     genre2 = genre_map[predicted_indices[1]]
 
-    print(f"Genres prédits : {genre1}, {genre2}")
+    print(f"Genre Predicted : {genre1}, {genre2}")
     try:
         songFeatures = extract_features(filepath)
     except Exception as e:
@@ -38,15 +45,15 @@ def predict():
         return jsonify({'error': 'Failed to process audio file'}), 500
         
     df_test_mood = pd.DataFrame(songFeatures, index=[0]) 
-    scaler_mood = joblib.load("Models/scaler (1).pkl")
-    knn_model_mood = joblib.load("Models/knn_model_mood (1).pkl")
+    scaler_mood = joblib.load("models/scaler (1).pkl")
+    knn_model_mood = joblib.load("models/knn_model_mood (1).pkl")
     df_test_scaled_mood = scaler_mood.transform(df_test_mood)
     
     predicted_mood_array = knn_model_mood.predict(df_test_scaled_mood)
     
     mood = predicted_mood_array[0]
     
-    print(f"Prédiction (Mood): {mood_map[mood]}")
+    print(f"Mood Predicted: {mood_map[mood]}")
 
     if (genre1 == "country"):
         listId = playlist_generator_music(genre2, mood_map[mood])
