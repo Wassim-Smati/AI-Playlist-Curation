@@ -26,6 +26,12 @@ genre_map = {
     9: "rock"
 }
 
+<<<<<<< HEAD
+=======
+img = audio_to_mel_spec("Musiques/System-Of-A-Down-Toxicity-_Official-HD-Video_-[AudioTrimmer.com].wav", "Images/spectrogramme")
+
+
+>>>>>>> ddd625d97fddd4a5e96fd9183369401ea3821d4f
 def load_image(img_path):
     img = image.load_img(img_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
@@ -33,6 +39,18 @@ def load_image(img_path):
     img_array = img_array / 255. 
     return img_array
 
+<<<<<<< HEAD
 model_CNN = tf.keras.models.load_model("models/vgg16_clean.keras", compile=False)
 
 print(model_CNN)
+=======
+model_CNN = tf.keras.models.load_model("Models/vgg16.h5")
+img_array = load_image("Images/spectrogramme.png")
+
+# Prédiction
+print("bonjour")
+prediction = model_CNN.predict(img_array)
+print(prediction)
+predicted_indices = np.argsort(prediction)[0][-2:][::-1]
+print(f"Genres prédits : {genre_map[int(predicted_indices[0])],genre_map[int(predicted_indices[1])]}")
+>>>>>>> ddd625d97fddd4a5e96fd9183369401ea3821d4f
