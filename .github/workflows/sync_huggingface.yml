@@ -1,0 +1,26 @@
+name: Sync to Hugging Face hub
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true 
+
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "bot@artishow.com"
+          git config --global user.name "Artishow Bot"
+          git remote add space https://Wassleboss:$HF_TOKEN@huggingface.co/spaces/Wassleboss/artishow-api
+          git push --force space main
+          
