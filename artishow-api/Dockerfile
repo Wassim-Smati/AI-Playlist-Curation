@@ -22,5 +22,5 @@ COPY . .
 # PLUS DE VARIABLE D'ENVIRONNEMENT LEGACY ICI !
 # On laisse Keras 3 faire son travail.
 
-EXPOSE 5000
+EXPOSE 7860
 CMD ["python", "api.py"]
