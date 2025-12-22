@@ -21,6 +21,11 @@ jobs:
         run: |
           git config --global user.email "bot@artishow.com"
           git config --global user.name "Artishow Bot"
-          git remote add space https://Wassleboss:$HF_TOKEN@huggingface.co/spaces/Wassleboss/artishow-api
-          git push --force space main
           
+          # On ajoute l'adresse de destination
+          git remote add space https://Wassleboss:$HF_TOKEN@huggingface.co/spaces/Wassleboss/artishow-api
+          
+          # LA COMMANDE MAGIQUE :
+          # Elle dit : "Prends le dossier 'python_model_server' de la branche 'main' 
+          # et force-le vers la branche 'main' du remote 'space'"
+          git push space `git subtree split --prefix python_model_server main`:main --force
