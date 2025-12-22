@@ -27,5 +27,5 @@ jobs:
           
           # LA COMMANDE MAGIQUE :
           # Elle dit : "Prends le dossier 'python_model_server' de la branche 'main' 
-          # et force-le vers la branche 'main' du remote 'space'"
-          git push space `git subtree split --prefix python_model_server main`:main --force
+          # et force-le vers la branche 'main' du remote 'space'"g
+          git push space `git subtree split --prefix artishow-api main`:main --force
