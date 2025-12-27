@@ -1,4 +1,6 @@
 from imports import *
+import json 
+import os
 
 save_path = ""
 
@@ -7,12 +9,13 @@ def audio_to_mel_spec(audio, save_path, sr=22050, n_mels=128, hop_length=512):
     melspec = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels, hop_length=hop_length)
     melspec_db = librosa.power_to_db(melspec, ref=np.max)
 
-    plt.figure(figsize=(4.32, 2.88), dpi=100) 
+    """plt.figure(figsize=(4.32, 2.88), dpi=100)""" 
+    plt.figure(figsize=(1.28, 1.28), dpi=100) #taille crnn
     plt.imshow(melspec_db, aspect='auto', origin='lower', cmap='magma', vmin=-42, vmax=0)
     plt.axis('off')
     plt.tight_layout(pad=0)
     plt.savefig(save_path, bbox_inches='tight', pad_inches=0)
-
+"""
 genre_map = {
     0: "blues",
     1: "classical",
@@ -24,10 +27,16 @@ genre_map = {
     7: "pop",
     8: "reggae",
     9: "rock"
-}
+}"""
+
+# mapping crnn
+with open("models/genre_mapping.json", 'r') as f:
+    mapping_data = json.load(f)
+    genre_map = {v: k for k, v in mapping_data.items()}
 
 def load_image(img_path):
-    img = image.load_img(img_path, target_size=(224, 224))
+    """img = image.load_img(img_path, target_size=(224, 224))"""
+    img = image.load_img(img_path, target_size=(128, 128)) #crnn
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255. 

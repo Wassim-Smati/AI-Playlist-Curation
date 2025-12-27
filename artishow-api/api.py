@@ -27,8 +27,13 @@ def predict():
     filepath = os.path.join("uploads", filename)
     file.save(filepath)
 
-    img = audio_to_mel_spec(filepath, "images/spectrogramme")
-    img_array = load_image("images/spectrogramme.png")
+    """img = audio_to_mel_spec(filepath, "images/spectrogramme")
+    img_array = load_image("images/spectrogramme.png")""" 
+
+    #crnn
+    spectro_path = os.path.join("images", f"spec_{uuid.uuid4().hex}.png")
+    img = audio_to_mel_spec(filepath, spectro_path)
+    img_array = load_image(spectro_path)
 
     predCnn = model_CNN.predict(img_array)
 
