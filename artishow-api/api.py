@@ -32,8 +32,10 @@ def predict():
 
     #crnn
     spectro_path = os.path.join("images", f"spec_{uuid.uuid4().hex}.png")
-    img = audio_to_mel_spec(filepath, spectro_path)
-    img_array = load_image(spectro_path)
+    audio_to_mel_spec(filepath, spectro_path)
+    img = image.load_img(spectro_path, target_size=(128, 128)) 
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
 
     predCnn = model_CNN.predict(img_array)
 
