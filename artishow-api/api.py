@@ -62,10 +62,12 @@ def predict():
     
     print(f"Mood Predicted: {mood_map[mood]}")
 
-    if (genre1 == "country"):
+    """if (genre1 == "country"):
         listId = playlist_generator_music(genre2, mood_map[mood])
     else: 
-        listId = playlist_generator_music(genre1, mood_map[mood])
+        listId = playlist_generator_music(genre1, mood_map[mood])"""
+    
+    listId = playlist_generator_music(genre1, genre2, mood_map[mood])
 
     print(f"Playlist générée : {listId}")
 
