@@ -23,4 +23,4 @@ COPY . .
 # On laisse Keras 3 faire son travail.
 
 EXPOSE 7860
-CMD ["python", "api.py"]
+CMD ["python", "api.py"] 

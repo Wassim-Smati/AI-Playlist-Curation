@@ -33,6 +33,6 @@ def load_image(img_path):
     img_array = img_array / 255. 
     return img_array
 
-model_CNN = tf.keras.models.load_model("models/vgg16_clean.keras", compile=False)
+model_CNN = tf.keras.models.load_model("models/modele_crnn_gpu_final.keras", compile=False)
 
 print(model_CNN)

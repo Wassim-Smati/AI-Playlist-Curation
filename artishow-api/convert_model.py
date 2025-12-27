@@ -1,8 +1,8 @@
 import tensorflow as tf
 import os
 
-old_model_path = "models/vgg16.h5"
-new_model_path = "models/vgg16.keras"
+old_model_path = "models/modele_crnn_gpu_final.h5"
+new_model_path = "models/modele_crnn_gpu_final.keras"
 
 print(f"Chargement de {old_model_path} avec TF {tf.__version__}...")
 
