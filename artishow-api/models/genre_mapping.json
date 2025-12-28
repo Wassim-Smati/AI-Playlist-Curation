@@ -1,1 +1,15 @@
-{"afrobeat": 0, "alternative": 1, "ambient": 2, "blues": 3, "classical": 4, "country": 5, "dance": 6, "disco": 7, "drum_and_bass": 8, "electronic": 9, "folk": 10, "funk": 11, "gospel": 12, "hip_hop": 13, "house": 14, "indie": 15, "jazz": 16, "k_pop": 17, "latin": 18, "latin_pop": 19, "metal": 20, "pop": 21, "punk": 22, "reggaeton": 23, "rnb": 24, "rock": 25, "soundtrack": 26, "techno": 27, "trap": 28, "world_music": 29}
+{
+  "afrobeat": 0,
+  "classical": 1,
+  "folk": 2,
+  "funk": 3,
+  "hip_hop": 4,
+  "house": 5,
+  "jazz": 6,
+  "latin": 7,
+  "metal": 8,
+  "pop": 9,
+  "rock": 10,
+  "techno": 11,
+  "trap": 12
+}
