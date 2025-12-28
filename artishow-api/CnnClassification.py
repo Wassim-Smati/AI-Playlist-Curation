@@ -36,7 +36,7 @@ with open("models/genre_mapping.json", 'r') as f:
 
 def load_image(img_path):
     """img = image.load_img(img_path, target_size=(224, 224))"""
-    img = image.load_img(img_path, target_size=(128, 128)) #crnn
+    img = image.load_img(img_path, target_size=(224, 224)) #crnn
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255. 

@@ -33,7 +33,7 @@ def predict():
     #crnn
     spectro_path = os.path.join("images", f"spec_{uuid.uuid4().hex}.png")
     audio_to_mel_spec(filepath, spectro_path)
-    img = image.load_img(spectro_path, target_size=(128, 128)) 
+    img = image.load_img(spectro_path, target_size=(224, 224)) 
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
 
