@@ -1,6 +1,12 @@
 from imports import *
 import json 
 import os
+import os
+import json
+import numpy as np
+import librosa
+import matplotlib.pyplot as plt
+import tensorflow as tf
 
 save_path = ""
 
@@ -42,6 +48,65 @@ def load_image(img_path):
     img_array = img_array / 255. 
     return img_array
 
-model_CNN = tf.keras.models.load_model("models/modele_crnn_hd_final_13genres.keras", compile=False)
+MODEL_PATH = os.path.join("", "models\modele_crnn_hd_final_13genres.keras")
+MAPPING_PATH = os.path.join("", "models\genre_mapping.json")
 
-print(model_CNN)
+# ==========================================
+# 2. CHARGEMENT DU MODÈLE ET DU MAPPING
+# ==========================================
+print("⏳ Chargement du modèle...")
+model_CNN = tf.keras.models.load_model(MODEL_PATH)
+print("✅ Modèle chargé !")
+
+print("⏳ Chargement des genres...")
+with open(MAPPING_PATH, 'r') as f:
+    mapping = json.load(f)
+    classes = {v: k for k, v in mapping.items()}
+print(f"✅ {len(classes)} genres connus.")
+
+def predict_genre(audio_path):
+    try:
+        # 1. Chargement audio
+        y, sr = librosa.load(audio_path, sr=22050, duration=30)
+
+        if len(y) < 22050 * 30:
+            y = np.pad(y, (0, 22050 * 30 - len(y)), mode='wrap')
+        else:
+            y = y[:22050 * 30]
+
+        # 2. Mel-spectrogramme (244 bandes)
+        melspec = librosa.feature.melspectrogram(
+            y=y,
+            sr=sr,
+            n_mels=224
+        )
+        melspec_db = librosa.power_to_db(melspec, ref=np.max)
+
+        # 3. Sauvegarde image temporaire (244x244)
+        temp_img_path = "temp_pred.png"
+        plt.figure(figsize=(2.24, 2.24), dpi=100)  # 244x244 pixels
+        plt.imshow(melspec_db, aspect='auto', origin='lower', cmap='magma')
+        plt.axis('off')
+        plt.savefig(temp_img_path, bbox_inches='tight', pad_inches=0)
+        plt.close()
+
+        # 4. Chargement image pour le modèle
+        img = tf.keras.utils.load_img(
+            temp_img_path,
+            target_size=(224, 224)
+        )
+        img_array = tf.keras.utils.img_to_array(img)
+        img_array = tf.expand_dims(img_array, axis=0)
+
+        # 5. Prédiction
+        predictions = model_CNN.predict(img_array)
+
+        return predictions
+
+    except Exception as e:
+        print(f"❌ Erreur lors de l'analyse : {e}")
+
+# ==========================================
+# 4. TEST
+# ==========================================
+predict_genre("3384600881_Clockworked (1).mp3")

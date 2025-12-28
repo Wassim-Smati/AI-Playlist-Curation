@@ -37,7 +37,7 @@ def predict():
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
 
-    predCnn = model_CNN.predict(img_array)
+    predCnn = predict_genre(filepath)
 
     predicted_indices = np.argsort(predCnn[0])[-2:][::-1]
     genre1 = genre_map[predicted_indices[0]] 
