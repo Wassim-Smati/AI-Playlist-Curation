@@ -48,18 +48,17 @@ def load_image(img_path):
     img_array = img_array / 255. 
     return img_array
 
-MODEL_PATH = os.path.join("", "models\modele_crnn_hd_final_13genres.keras")
-MAPPING_PATH = os.path.join("", "models\genre_mapping.json")
-
+MODEL_PATH = os.path.join("models", "modele_crnn_hd_final_13genres.keras")
+MAPPING_PATH = os.path.join("models", "genre_mapping.json")
 # ==========================================
 # 2. CHARGEMENT DU MODÈLE ET DU MAPPING
 # ==========================================
 print("⏳ Chargement du modèle...")
-model_CNN = tf.keras.models.load_model("models\modele_crnn_hd_final_13genres.keras")
+model_CNN = tf.keras.models.load_model("models/modele_crnn_hd_final_13genres.keras")
 print("✅ Modèle chargé !")
 
 print("⏳ Chargement des genres...")
-with open("models\genre_mapping.json", 'r') as f:
+with open(MAPPING_PATH, 'r') as f:
     mapping = json.load(f)
     classes = {v: k for k, v in mapping.items()}
 print(f"✅ {len(classes)} genres connus.")
