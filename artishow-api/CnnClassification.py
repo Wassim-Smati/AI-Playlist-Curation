@@ -55,11 +55,11 @@ MAPPING_PATH = os.path.join("", "models\genre_mapping.json")
 # 2. CHARGEMENT DU MODÈLE ET DU MAPPING
 # ==========================================
 print("⏳ Chargement du modèle...")
-model_CNN = tf.keras.models.load_model(MODEL_PATH)
+model_CNN = tf.keras.models.load_model("models\modele_crnn_hd_final_13genres.keras")
 print("✅ Modèle chargé !")
 
 print("⏳ Chargement des genres...")
-with open(MAPPING_PATH, 'r') as f:
+with open("models\genre_mapping.json", 'r') as f:
     mapping = json.load(f)
     classes = {v: k for k, v in mapping.items()}
 print(f"✅ {len(classes)} genres connus.")
@@ -106,7 +106,3 @@ def predict_genre(audio_path):
     except Exception as e:
         print(f"❌ Erreur lors de l'analyse : {e}")
 
-# ==========================================
-# 4. TEST
-# ==========================================
-predict_genre("3384600881_Clockworked (1).mp3")
