@@ -101,7 +101,7 @@ def predict_genre(audio_path):
         # 5. Prédiction
         predictions = model_CNN.predict(img_array)
 
-        return predictions
+        return predictions#test
 
     except Exception as e:
         print(f"❌ Erreur lors de l'analyse : {e}")
