@@ -1,6 +1,8 @@
 # 🎵 Playlist Curation  
 *Personalized AI playlist recommendations*
 
+Try it here : https://appetize.io/app/b_e7noakfqlzpqggc54ns5p4tidy
+
 <img src="_playlist-curation-2 (1).png" alt="Playlist Curation Poster" width="600"/>
 
 [![YouTube](https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg)](https://www.youtube.com/shorts/TyXu-nWRp_8)
