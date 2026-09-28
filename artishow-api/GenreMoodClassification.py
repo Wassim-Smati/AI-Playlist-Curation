@@ -23,7 +23,8 @@ def extract_features(audio_input, duration=30, sr=22050):
     features_raw = [] 
     for f_val in [mfcc, rms, spectral_centroid, bandwidth, contrast, flatness, rolloff, tonnetz, zero_crossing]:
         features_raw.extend(stats(f_val))
-    features_raw.append(float(tempo))
+    tempo_val = float(np.atleast_1d(tempo)[0])
+    features_raw.append(tempo_val)
 
     return [features_raw]
 

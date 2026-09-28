@@ -2,7 +2,7 @@ Flask
 Werkzeug
 gunicorn
 requests
-numpy
+numpy<2.0.0
 pandas
 scikit-learn
 joblib
