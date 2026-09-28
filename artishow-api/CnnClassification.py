@@ -63,17 +63,22 @@ with open(MAPPING_PATH, 'r') as f:
     classes = {v: k for k, v in mapping.items()}
 print(f"✅ {len(classes)} genres connus.")
 
-def predict_genre(audio_path):
+def predict_genre(audio_input, sr=22050):
+    temp_img_path = None
     try:
-        # 1. Chargement audio
-        y, sr = librosa.load(audio_path, sr=22050, duration=30)
-
-        if len(y) < 22050 * 30:
-            y = np.pad(y, (0, 22050 * 30 - len(y)), mode='wrap')
+        # 1. Chargement audio si ce n'est pas déjà un tableau numpy
+        if isinstance(audio_input, (str, bytes, os.PathLike)):
+            y, sr = librosa.load(audio_input, sr=sr, duration=30)
         else:
-            y = y[:22050 * 30]
+            y = audio_input
 
-        # 2. Mel-spectrogramme (244 bandes)
+        target_length = sr * 30
+        if len(y) < target_length:
+            y = np.pad(y, (0, target_length - len(y)), mode='wrap')
+        else:
+            y = y[:target_length]
+
+        # 2. Mel-spectrogramme (224 bandes)
         melspec = librosa.feature.melspectrogram(
             y=y,
             sr=sr,
@@ -81,13 +86,14 @@ def predict_genre(audio_path):
         )
         melspec_db = librosa.power_to_db(melspec, ref=np.max)
 
-        # 3. Sauvegarde image temporaire (244x244)
-        temp_img_path = "temp_pred.png"
-        plt.figure(figsize=(2.24, 2.24), dpi=100)  # 244x244 pixels
+        # 3. Sauvegarde image temporaire (224x224)
+        import uuid
+        temp_img_path = f"temp_pred_{uuid.uuid4().hex[:8]}.png"
+        fig = plt.figure(figsize=(2.24, 2.24), dpi=100)
         plt.imshow(melspec_db, aspect='auto', origin='lower', cmap='magma')
         plt.axis('off')
         plt.savefig(temp_img_path, bbox_inches='tight', pad_inches=0)
-        plt.close()
+        plt.close(fig)
 
         # 4. Chargement image pour le modèle
         img = tf.keras.utils.load_img(
@@ -97,11 +103,17 @@ def predict_genre(audio_path):
         img_array = tf.keras.utils.img_to_array(img)
         img_array = tf.expand_dims(img_array, axis=0)
 
-        # 5. Prédiction
-        predictions = model_CNN.predict(img_array)
-
-        return predictions#test
+        # 5. Prédiction silencieuse (verbose=0 supprime la barre de progression Keras 1/1 ━━━━━━━━)
+        predictions = model_CNN.predict(img_array, verbose=0)
+        return predictions
 
     except Exception as e:
-        print(f"❌ Erreur lors de l'analyse : {e}")
+        print(f"❌ Erreur lors de l'analyse : {e}", flush=True)
+        return None
+    finally:
+        if temp_img_path and os.path.exists(temp_img_path):
+            try:
+                os.remove(temp_img_path)
+            except Exception:
+                pass
 

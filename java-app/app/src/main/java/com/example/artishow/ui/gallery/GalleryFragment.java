@@ -44,6 +44,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import com.example.artishow.network.HttpClientProvider;
 
 
 
@@ -61,11 +62,7 @@ public class GalleryFragment extends Fragment {
 
     private List<musicItem> musicList = new ArrayList<>();
 
-    private final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build();
+    private final OkHttpClient client = HttpClientProvider.getClient();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         GalleryViewModel galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
@@ -74,7 +71,7 @@ public class GalleryFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textView2;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         Button recordButton = root.findViewById(R.id.recordButton);
@@ -161,7 +158,7 @@ public class GalleryFragment extends Fragment {
         RequestBody requestBody = builder.build();
 
         Request.Builder builder2 = new Request.Builder();
-        builder2.url("https://8d933c23a627.ngrok-free.app/predict");
+        builder2.url("https://wassleboss-artishow-api.hf.space/predict");
         builder2.post(requestBody);
         Request request = builder2.build();
 

@@ -1,16 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Artishow" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <!-- Base application theme pour le mode sombre (Night). -->
+    <style name="Theme.Artishow" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color: Luminous violet -->
+        <item name="colorPrimary">#BB86FC</item>
+        <item name="colorOnPrimary">#25004A</item>
+        <item name="colorPrimaryContainer">#4A148C</item>
+        <item name="colorOnPrimaryContainer">#EADDFF</item>
+
+        <!-- Secondary brand color: Cyan / Teal glow -->
+        <item name="colorSecondary">#03DAC5</item>
+        <item name="colorOnSecondary">#00332C</item>
+        <item name="colorSecondaryContainer">#004D40</item>
+        <item name="colorOnSecondaryContainer">#A7F3D0</item>
+
+        <!-- Tertiary Colors: Magenta Neon -->
+        <item name="colorTertiary">#FF4081</item>
+        <item name="colorOnTertiary">#4B001F</item>
+        <item name="colorTertiaryContainer">#780036</item>
+        <item name="colorOnTertiaryContainer">#FFD8E4</item>
+
+        <!-- Deep Midnight Canvas with elevated Card surfaces -->
+        <item name="android:windowBackground">#100E17</item>
+        <item name="colorSurface">#1B1824</item>
+        <item name="colorOnSurface">#F4F0FA</item>
+        <item name="colorSurfaceVariant">#272234</item>
+        <item name="colorOnSurfaceVariant">#CAC4D0</item>
+        <item name="colorOutline">#3E364F</item>
+        <item name="colorOutlineVariant">#2E273B</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">#100E17</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="toolbarStyle">@style/Widget.Artishow.Toolbar</item>
     </style>
+
+    <style name="Widget.Artishow.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+        <item name="navigationIconTint">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.NavigationDrawer.Item" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <style name="Theme.Artishow.NoActionBar" parent="Theme.Artishow">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Artishow.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
+
+    <style name="Theme.Artishow.PopupOverlay" parent="ThemeOverlay.Material3.Dark" />
 </resources>

@@ -46,6 +46,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import com.example.artishow.network.HttpClientProvider;
 
 public class SlideshowFragment extends Fragment {
 
@@ -61,11 +62,7 @@ public class SlideshowFragment extends Fragment {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build();
+    private final OkHttpClient client = HttpClientProvider.getClient();
     private FragmentSlideshowBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +102,7 @@ public class SlideshowFragment extends Fragment {
         recyclerMoodPhrase.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMoodPhrase.setAdapter(musicAdapter);
 
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
@@ -123,7 +120,7 @@ public class SlideshowFragment extends Fragment {
         builder.addFormDataPart("string", query);
         RequestBody requestBody = builder.build();
         Request.Builder builder2 = new Request.Builder();
-        builder2.url("https://8d933c23a627.ngrok-free.app/moodPhrasePredict");
+        builder2.url("https://wassleboss-artishow-api.hf.space/moodPhrasePredict");
         builder2.post(requestBody);
         Request request = builder2.build();
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:openDrawer="start">
 
     <include
@@ -21,5 +22,15 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.NavigationDrawer.Item"
+        app:itemShapeFillColor="@color/nav_item_background"
+        app:itemIconTint="@color/nav_item_icon"
+        app:itemTextColor="@color/nav_item_text"
+        app:itemVerticalPadding="12dp"
+        app:itemHorizontalPadding="20dp"
+        app:itemIconSize="24dp"
+        android:background="?attr/colorSurface" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,7 +1,10 @@
 from imports import *
 
-def extract_features(file_path, duration=30, sr=22050): 
-    y, sr_loaded = librosa.load(file_path, duration=30, sr=22050) 
+def extract_features(audio_input, duration=30, sr=22050): 
+    if isinstance(audio_input, (str, bytes, os.PathLike)):
+        y, _ = librosa.load(audio_input, duration=duration, sr=sr) 
+    else:
+        y = audio_input 
 
     def stats(feature):
         return list(map(float, np.mean(feature, axis=1))) + list(map(float, np.std(feature, axis=1)))

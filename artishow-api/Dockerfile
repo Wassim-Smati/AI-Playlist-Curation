@@ -19,8 +19,7 @@ RUN pip install --no-cache-dir --default-timeout=100 -r requirements.txt
 # On copie le code
 COPY . .
 
-# PLUS DE VARIABLE D'ENVIRONNEMENT LEGACY ICI !
-# On laisse Keras 3 faire son travail.
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 7860
-CMD ["python", "api.py"] 
+CMD ["ddtrace-run", "python", "api.py"] 

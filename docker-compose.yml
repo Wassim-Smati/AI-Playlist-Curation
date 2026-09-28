@@ -1,0 +1,51 @@
+services:
+  # -------------------------------------------------------------
+  # Backend API Flask - AI Playlist Curation
+  # -------------------------------------------------------------
+  artishow-api:
+    build:
+      context: ./artishow-api
+      dockerfile: Dockerfile
+    container_name: artishow-api
+    ports:
+      - "7860:7860"
+    environment:
+      # Datadog APM & Tracing Configuration
+      - DD_AGENT_HOST=datadog-agent
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_SERVICE=artishow-api
+      - DD_ENV=${DD_ENV:-production}
+      - DD_VERSION=${DD_VERSION:-1.0.0}
+      - DD_LOGS_INJECTION=true
+      - DD_TRACE_SAMPLE_RATE=1.0
+    depends_on:
+      datadog-agent:
+        condition: service_started
+    restart: unless-stopped
+
+  # -------------------------------------------------------------
+  # Datadog Agent (APM, Metrics, Logs, Container Monitoring)
+  # -------------------------------------------------------------
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7
+    container_name: datadog-agent
+    environment:
+      # Remplacez dans votre fichier .env local
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=${DD_SITE:-us5.datadoghq.com}
+      # Activation APM (Tracing)
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      # Activation des logs
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      # Surveillance des processus et conteneurs
+      - DD_PROCESS_AGENT_ENABLED=true
+    ports:
+      - "8126:8126"       # APM Trace receiver
+      - "8125:8125/udp"   # DogStatsD receiver
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    restart: unless-stopped

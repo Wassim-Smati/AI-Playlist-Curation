@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Secrets & Keys
+*.pem
+*.key
+id_rsa*
+id_ed25527*
+.secrets/
+.env
+*.env
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+*~
+.vscode/
+*.ipr
+*.iws
+
+# Accidental log files / typos
+df,
+
+# Gradle & Android builds (root or subprojects)
+.gradle/
+buildOutputCleanup/
+file-system.probe
+8.11.1/
+vcs-1/
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties

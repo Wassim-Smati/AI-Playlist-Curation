@@ -16,7 +16,7 @@
 <br/>
 
 <a href="https://appetize.io/app/b_e7noakfqlzpqggc54ns5p4tidy" target="_blank">
-  <img src="_playlist-curation-2 (1).png" alt="Playlist Curation Poster" width="600" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
+  <img src="docs/assets/playlist-curation-poster.png" alt="Playlist Curation Poster" width="600" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
 </a>
 <p><i>👆 Click the image above to launch the live demo!</i></p>
 
